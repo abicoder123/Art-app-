@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>🎨 Your (he)arts desire!</title>
+
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			font-family: Arial, sans-serif;
+			background: linear-gradient(135deg, #ffe4f2, #e9f7ff, #fff8dc);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		h1 {
+			color: #ff69b4;
+			margin: 18px 0 8px;
+		}
+
+		.toolbar {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			justify-content: center;
+			background: white;
+			padding: 12px;
+			border-radius: 20px;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
+			margin-bottom: 15px;
+		}
+
+		button,
+		input {
+			border: none;
+			border-radius: 999px;
+			padding: 8px 14px;
+			cursor: pointer;
+			font-size: 15px;
+		}
+
+		button {
+			background: #ffd6eb;
+		}
+
+		button:hover {
+			transform: scale(1.05);
+		}
+
+		canvas {
+			background: white;
+			border-radius: 25px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+			touch-action: none;
+		}
+    .text {
+      font-family: lucida;
+    }
+	</style>
+</head>
+
+<body>
+
+	<h1 class = "text">🎨 YOUR ART'S DESIRE!✨</h1>
+
+	<div class="toolbar">
+		<input type="color" id="color" value="#ff69b4">
+
+		<label>
+🖌️
+<input type="range" id="size" min="1" max="40" value="8">
+</label>
+
+		<button id="eraser">🧽 Eraser</button>
+		<button id="clear">🗑️ Clear</button>
+	</div>
+
+	<canvas id="canvas" width="900" height="550"></canvas>
+
+	<script>
+		const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+ctx.lineCap="round";
+ctx.lineJoin="round";
+
+let drawing=false;
+let color=document.getElementById("color").value;
+let size=document.getElementById("size").value;
+
+document.getElementById("color").oninput=e=>{
+    color=e.target.value;
+};
+
+document.getElementById("size").oninput=e=>{
+    size=e.target.value;
+};
+
+document.getElementById("eraser").onclick=()=>{
+    color="#ffffff";
+};
+
+document.getElementById("clear").onclick=()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+};
+
+function pos(e){
+    // This keeps the line directly under the cursor.
+    const r=canvas.getBoundingClientRect();
+    return{
+        x:e.clientX-r.left,
+        y:e.clientY-r.top
+    };
+}
+
+canvas.onpointerdown=e=>{
+    drawing=true;
+    const p=pos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+};
+
+canvas.onpointermove=e=>{
+    if(!drawing)return;
+
+    const p=pos(e);
+
+    ctx.strokeStyle=color;
+    ctx.lineWidth=size;
+    ctx.lineTo(p.x,p.y);
+    ctx.stroke();
+};
+
+window.onpointerup=()=>{
+    drawing=false;
+    ctx.beginPath();
+};
+	</script>
+
+</body>
+
+</html>
